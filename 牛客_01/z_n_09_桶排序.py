@@ -4,27 +4,23 @@
 # Author   ：zheng xingtao
 # Date     ：2021/3/22 13:39
 
+"""
+桶排序：
+    计数排序
+    基数排序
+"""
+
 
 class MaxGap:
     def get_max(self, arr: list):
         """启动桶排序"""
         if arr is None or len(arr) < 2:
-            return
+            return 0
 
-        min_ = min(arr)
-        max_ = max(arr)
-        len_ = len(arr)
-
-        """
-        # 遍历数组，找到数组的min和max
-        for i in range(len(arr)):
-            # 遍历数组，用每个数和当前的min_比较，并更新min_、max
-            min_ = min(min_, arr[i])
-            max_ = max(min_, arr[i])
-        """
-
-        if min_ == max_:
-            # 说明只有一个相同的数
+        min_, max_, len_ = min(arr), max(arr), len(arr)
+        for num in arr:
+            min_, max_ = min(min_, num), max(max_, num)
+        if min_ == max_:  # 说明只有一个相同的数
             return 0
 
         min_s = [0] * (len(arr) + 1)  # 每个桶的最小值
@@ -38,7 +34,6 @@ class MaxGap:
             max_s[bid] = max(max_s[bid], arr[i]) if has_num[bid] else arr[i]
             has_num[bid] = True
 
-        print(min_s, max_s)
         result = 0
         lastMax = max_s[0]
 
@@ -47,15 +42,58 @@ class MaxGap:
             if has_num[i]:
                 result = max(result, min_s[i] - lastMax)
                 lastMax = max_s[i]
-
         return result
 
     def bucket(self, num: int, len_: int, min_: int, max_: int):
-        """怎么确定一个数来自于哪个桶"""
-        print(int((num - min_) * len_ / (max_ - min_)))
-        return int((num - min_) * len_ / (max_ - min_))
+        """
+        怎么确定一个数来自于哪个桶:
+            # 最后的的答案一定大于等于 bucket_size
+            # 因为只有这n个数均匀排列才等于bucket_size
+            # 否则一定大于bucket_size
+        """
+        return int((num - min_) * (len_ - 1) / (max_ - min_))
 
 
-list_ = [2, 10, 9, 20]
+list_ = [2, 10, 9, 30]
 number = MaxGap().get_max(list_)
 print(number)
+
+"""
+def maximumGap(nums):
+    if nums is None or len(nums) < 2:
+        return 0
+
+    MIN, MAX, n = nums[0], nums[0], len(nums)
+    for num in nums:
+        MIN, MAX = min(MIN, num), max(MAX, num)
+    if MIN == MAX:
+        return 0
+
+    # 最后的的答案一定大于等于 bucket_size
+    # 因为只有这n个数均匀排列才等于bucket_size
+    # 否则一定大于bucket_size
+    bucket_size = (MAX - MIN) / (n - 1)
+    buckets = [None for i in range(n)]
+
+     # 将每个数放到相应的桶内
+    for num in nums:
+        bucket_id = int((num - MIN) // bucket_size)
+        if buckets[bucket_id] == None:
+            buckets[bucket_id] = [num, num]
+        else:
+            buckets[bucket_id][0] = min(buckets[bucket_id][0], num)
+            buckets[bucket_id][1] = max(buckets[bucket_id][1], num)
+
+    ans, pre_bucket, = 0, None
+
+    for cur_bucket in range(len(buckets)):
+        if buckets[cur_bucket] == None:
+            continue
+        if pre_bucket != None:
+            ans = max(ans, buckets[cur_bucket][0] - buckets[pre_bucket][1])
+        pre_bucket = cur_bucket
+    print(ans)
+
+list_ = [2, 10, 9, 20]
+maximumGap(list_)
+"""
