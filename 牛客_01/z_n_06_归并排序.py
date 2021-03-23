@@ -115,5 +115,3 @@ class SmallSum(object):
 
 result = SmallSum().small_sum([1, 3, 4, 2, 5])
 print(result)
-
-# TODO: 位运算比常熟计算快很多！

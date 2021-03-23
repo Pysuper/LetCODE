@@ -17,6 +17,7 @@ class MaxGap:
         if arr is None or len(arr) < 2:
             return 0
 
+        # 拿到数组中的最大值最小值
         min_, max_, len_ = min(arr), max(arr), len(arr)
         for num in arr:
             min_, max_ = min(min_, num), max(max_, num)
@@ -58,42 +59,27 @@ list_ = [2, 10, 9, 30]
 number = MaxGap().get_max(list_)
 print(number)
 
-"""
-def maximumGap(nums):
-    if nums is None or len(nums) < 2:
-        return 0
 
-    MIN, MAX, n = nums[0], nums[0], len(nums)
-    for num in nums:
-        MIN, MAX = min(MIN, num), max(MAX, num)
-    if MIN == MAX:
-        return 0
+def count_sort(arr):
+    output = [0 for i in range(256)]
+    count = [0 for i in range(256)]
+    ans = ["0" for _ in arr]
 
-    # 最后的的答案一定大于等于 bucket_size
-    # 因为只有这n个数均匀排列才等于bucket_size
-    # 否则一定大于bucket_size
-    bucket_size = (MAX - MIN) / (n - 1)
-    buckets = [None for i in range(n)]
+    for i in arr:
+        count[ord(i)] += 1
 
-     # 将每个数放到相应的桶内
-    for num in nums:
-        bucket_id = int((num - MIN) // bucket_size)
-        if buckets[bucket_id] == None:
-            buckets[bucket_id] = [num, num]
-        else:
-            buckets[bucket_id][0] = min(buckets[bucket_id][0], num)
-            buckets[bucket_id][1] = max(buckets[bucket_id][1], num)
+    for i in range(256):
+        count[i] += count[i - 1]
 
-    ans, pre_bucket, = 0, None
+    for i in range(len(arr)):
+        output[count[ord(arr[i])] - 1] = arr[i]
+        count[ord(arr[i])] -= 1
 
-    for cur_bucket in range(len(buckets)):
-        if buckets[cur_bucket] == None:
-            continue
-        if pre_bucket != None:
-            ans = max(ans, buckets[cur_bucket][0] - buckets[pre_bucket][1])
-        pre_bucket = cur_bucket
-    print(ans)
+    for i in range(len(arr)):
+        ans[i] = output[i]
+    return ans
 
-list_ = [2, 10, 9, 20]
-maximumGap(list_)
-"""
+
+arr = "wwwrunoobcom"
+ans = count_sort(arr)
+print("字符数组排序 %s" % ("".join(ans)))

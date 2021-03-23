@@ -18,25 +18,29 @@
 """
 
 
-class BubbleSort(object):
-    def sorted(self, arr):
-        """
-        冒泡排序
-        时间复杂度为 O(N^2), 额外空间复杂度O(1)
-        :param arr: 无序列表
-        :return: 排序后的列表
-        """
-        if len(arr) > 2 or arr is not None:
-            for i in range(len(arr) - 1):
-                for j in range(len(arr) - i - 1):
-                    # 每次选择最大的，放在最后
-                    if arr[j] > arr[j + 1]:
-                        arr[j], arr[j + 1] = arr[j + 1], arr[j]
-        print(arr)
+def bubble_sort(arr):
+    """
+    冒泡排序
+    时间复杂度为 O(N^2), 额外空间复杂度O(1)
+    :param arr: 无序列表
+    :return: 排序后的列表
+    """
+    if len(arr) > 2 or arr is not None:
+
+        # 第一遍：遍历数组中的所有元素
+        for i in range(len(arr)):
+
+            # 第二遍：需要遍历的元素逐渐减少
+            for j in range(len(arr) - i - 1):
+
+                # 每次选择最大的，放在最后
+                if arr[j] > arr[j + 1]:
+                    arr[j], arr[j + 1] = arr[j + 1], arr[j]
+    return arr
 
 
 list_ = [2, 4, 3, 5, 7, 6, 9, 8]
-sort_arr = BubbleSort().sorted(list_)
+sort_arr = bubble_sort(list_)
 
 """
 固定时间的操作，都是O(1)
